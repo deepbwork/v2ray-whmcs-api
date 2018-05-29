@@ -1,0 +1,12 @@
+<?php
+return $config = [
+    'db_hostname' => 'localhost',
+    'db_database' => 'whmcs',
+    'db_username' => 'root',
+    'db_password' => 'root',
+    'db_port'     => 3306,
+    'cc_encryption_hash' => 'ghdaTu8ZmukDXKkn3uWhv1Vg8l2pSTmY1pYLJXAWhLq4lAieV4mgW7nUjf91ZmPQ',
+    'app_website' => 'http://www.baidu.com',
+    'app_background' => 'url(http://uploads.5068.com/allimg/161116/67-1611161R107.jpg) 50% 50% / cover',
+    'app_title' => '应用名称'
+];
