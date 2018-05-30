@@ -6,3 +6,9 @@ whmcs配置文件可见WHMCS安装目录下`configuration.php`
 ## 测试
 访问`https://domain/client/server.php?token=秘钥&databaseName=数据库名&method=getUsers`  
 部署成功则返回json
+## 配置文件结构
+|参数名|描述|
+|:-|:-|
+|app_website|WHMCS主站地址|
+|app_background|客户端背景图|
+|app_title|客户端标题|
