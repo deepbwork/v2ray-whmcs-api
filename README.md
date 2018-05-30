@@ -9,6 +9,9 @@ whmcs配置文件可见WHMCS安装目录下`configuration.php`
 ## 配置文件结构
 |参数名|描述|
 |:-|:-|
+|db_hostname|见WHMCS的configuration.php文件|
+|db_...|同上|
+|cc_encryption_hash|同上|
 |app_website|WHMCS主站地址|
 |app_background|客户端背景图|
 |app_title|客户端标题|
