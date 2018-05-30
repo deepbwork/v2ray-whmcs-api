@@ -65,7 +65,7 @@ function getConfig(){
   "stats": {
   },
   "inbound": {
-    "port": 4431,
+    "port": 443,
     "protocol": "vmess",
     "settings": {
       "clients": []
