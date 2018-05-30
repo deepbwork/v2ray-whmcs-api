@@ -5,3 +5,4 @@
 whmcs配置文件可见WHMCS安装目录下`configuration.php`
 ## 测试
 访问`https://domain/client/server.php?token=秘钥&databaseName=数据库名&method=getUsers`  
+部署成功则返回json
