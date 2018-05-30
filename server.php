@@ -53,6 +53,74 @@ function addTraffic(){
 }
 
 
+function getConfig(){
+	echo '{
+  "api": {
+    "services": [
+      "HandlerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
+  "stats": {
+  },
+  "inbound": {
+    "port": 4431,
+    "protocol": "vmess",
+    "settings": {
+      "clients": []
+    },
+    "streamSettings": {
+      "network": "tcp"
+    },
+    "tag": "proxy"
+  },
+  "inboundDetour": [{
+    "listen": "0.0.0.0",
+    "port": 23333,
+    "protocol": "dokodemo-door",
+    "settings": {
+      "address": "0.0.0.0"
+    },
+    "tag": "api"
+  }],
+  "log": {
+    "loglevel": "debug",
+    "access": "access.log",
+    "error": "error.log"
+  },
+  "outbound": {
+    "protocol": "freedom",
+    "settings": {}
+  },
+  "routing": {
+    "settings": {
+      "rules": [{
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      }]
+    },
+    "strategy": "rules"
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "handshake": 4,
+        "connIdle": 300,
+        "uplinkOnly": 5,
+        "downlinkOnly": 30,
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    }
+  }
+}
+';
+}
+
 $databaseName = !empty($_GET['databaseName'])?$_GET['databaseName']:null;
 $token = !empty($_GET['token'])?$_GET['token']:null;
 $method = !empty($_GET['method'])?$_GET['method']:null;
@@ -72,7 +140,9 @@ if(isset($databaseName) && isset($token)){
 	    case 'getUsers': return getUsers();
 	    break;
 	    case 'addTraffic': return addTraffic();
-	    break;
+        break;
+        case 'getConfig': return getConfig();
+        break;
 	}
 
 }else{
