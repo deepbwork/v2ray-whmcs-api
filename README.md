@@ -4,7 +4,7 @@
 输入WHMCS服务器配置信息及客户端信息  
 whmcs配置文件可见WHMCS安装目录下`configuration.php`
 ## 测试
-访问`https://domain/client/server.php?token=秘钥&databaseName=数据库名&method=getUsers`  
+访问`https://domain/client/server.php?token=秘钥&databaseName=节点对应数据库名(V2ray数据库)&method=getUsers`  
 部署成功则返回json
 ## 配置文件结构
 |参数名|描述|
