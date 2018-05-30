@@ -29,6 +29,7 @@ function getUsers(){
 
 function addTraffic(){
     global $Db;
+    $rate = $_GET['rate'];
     $input = file_get_contents("php://input");
     //file_put_contents('111.txt', json_encode($input));
     $datas = json_decode($input, true);
@@ -36,8 +37,8 @@ function addTraffic(){
         $user = $Db->where('pid', $data['user_id'])->getOne('user');
         $fetchData = [
             't' => time(),
-            'u' => $user['u'] + $data['u'],
-            'd' => $user['d'] + $data['d'],
+            'u' => $user['u'] + ($data['u'] * $rate),
+            'd' => $user['d'] + ($data['d'] * $rate),
             'enable' => $user['u'] + $user['d'] <= $user['transfer_enable']?1:0
         ];
         $result = $Db->where('pid', $data['user_id'])->update('user', $fetchData);
