@@ -80,16 +80,14 @@ function getHosting(){
     if ($product && $hosting) {
         for($i=0;$i<count($hosting);$i++) {
             for($n=0;$n<=count($product);$n++) {
-                if($product[$n]['servertype'] == 'v2ray') {
-                    if ($hosting[$i]['packageid'] == $product[$n]['id']) {
-                        $arr[$i] = [
-                            'packageId' => $hosting[$i]['id'],
-                            'name' => $product[$n]['name'],
-                            'serverId' => $hosting[$i]['server'],
-                            'expireDate' => $hosting[$i]['nextduedate'],
-                            'node' => getNodes($product[$n]['configoption7'], $hosting[$i]['server'])
-                        ];
-                    }
+                if ($hosting[$i]['packageid'] == $product[$n]['id'] && $product[$n]['servertype'] == 'v2ray') {
+                    $arr[$i] = [
+                        'packageId' => $hosting[$i]['id'],
+                        'name' => $product[$n]['name'],
+                        'serverId' => $hosting[$i]['server'],
+                        'expireDate' => $hosting[$i]['nextduedate'],
+                        'node' => getNodes($product[$n]['configoption7'], $hosting[$i]['server'])
+                    ];
                 }
             }
         }
