@@ -82,13 +82,13 @@ function getHosting(){
             for($n=0;$n<=count($product);$n++) {
                 if ($hosting[$i]['packageid'] == $product[$n]['id']) {
                     if($product[$n]['servertype'] == 'v2ray') {
-                        $arr[$i] = [
-                            'packageId' => $hosting[$i]['id'],
-                            'name' => $product[$n]['name'],
-                            'serverId' => $hosting[$i]['server'],
-                            'expireDate' => $hosting[$i]['nextduedate'],
-                            'node' => getNodes($product[$n]['configoption7'], $hosting[$i]['server'])
-                        ];
+                        array_push($arr, [
+                          'packageId' => $hosting[$i]['id'],
+                          'name' => $product[$n]['name'],
+                          'serverId' => $hosting[$i]['server'],
+                          'expireDate' => $hosting[$i]['nextduedate'],
+                          'node' => getNodes($product[$n]['configoption7'], $hosting[$i]['server'])
+                        ]);
                     }
                 }
             }
