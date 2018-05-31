@@ -80,7 +80,7 @@ function getHosting(){
     if ($product && $hosting) {
         for($i=0;$i<count($hosting);$i++) {
             for($n=0;$n<=count($product);$n++) {
-                if ($hosting[$i]['packageid'] == $product[$n]['id']) {
+                if ($hosting[$i]['packageid'] == $product[$n]['id'] && $product[$n]['servertype'] == 'v2ray') {
                     $arr[$i] = [
                         'packageId' => $hosting[$i]['id'],
                         'name' => $product[$n]['name'],
