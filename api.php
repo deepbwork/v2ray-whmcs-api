@@ -32,7 +32,7 @@ function verifyToken() {
 
 function recordLog(){
     global $config;
-    file_put_contents($config['cc_encryption_hash'].'.log', date('[Y-m-d H:i:s]').urldecode($_POST['log']) + "\r\n", FILE_APPEND);
+    file_put_contents('/tmp/'.$config['cc_encryption_hash'].'.log', date('[Y-m-d H:i:s]').urldecode($_POST['log'])."\r\n", FILE_APPEND);
 }
 
 function getNodes($str, $serverId) {
