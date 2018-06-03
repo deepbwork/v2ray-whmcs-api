@@ -30,6 +30,10 @@ function verifyToken() {
     return $user;
 }
 
+function recordLog(){
+    global $config;
+    file_put_contents($config['cc_encryption_hash'].'.log', date('[Y-m-d H:i:s]').urldecode($_POST['log']) + "\r\n", FILE_APPEND);
+}
 
 function getNodes($str, $serverId) {
     global $Db;
@@ -314,8 +318,10 @@ if(isset($service)){
 	    break;
 	    case 'v2ray.userInfo' : return getUserInfo();
 	    break;
-	    case 'app.init' : return getInit();
-	    break;
+      case 'app.init' : return getInit();
+      break;
+      case 'app.log' : return recordLog();
+      break;
 	}
 
 }else{
