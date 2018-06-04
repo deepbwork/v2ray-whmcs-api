@@ -20,12 +20,12 @@ function verifyToken() {
     global $Db;
     $token = !empty($_GET['token'])?$_GET['token']:null;
     if (empty($token)) {
-        return echoJson(0, '', 'token null');
+        return echoJson(0, '', '令牌为空');
     }
     $user = $Db->where('securityqans', $token)->getOne('tblclients');
     //$user = Capsule::table('tblclients')->where('securityqans', $token)->first();
     if (empty($user)) {
-        return echoJson(0, '', 'not find user');
+        return echoJson(0, '', '登录失败，请尝试重新登录');
     }
     return $user;
 }
@@ -325,5 +325,5 @@ if(isset($service)){
 	}
 
 }else{
-	return echoJson(0, '', 'services null');
+	return echoJson(0, '', 'service error');
 }
