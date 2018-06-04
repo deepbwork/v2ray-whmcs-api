@@ -25,7 +25,7 @@ function verifyToken() {
     $user = $Db->where('securityqans', $token)->getOne('tblclients');
     //$user = Capsule::table('tblclients')->where('securityqans', $token)->first();
     if (empty($user)) {
-        return echoJson(0, '', '登录失败，请尝试重新登录');
+        return echoJson(0, '', '令牌过期，请尝试重新登录');
     }
     return $user;
 }
