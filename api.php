@@ -22,7 +22,7 @@ function verifyToken() {
     if (empty($token)) {
         return echoJson(0, '', '令牌为空');
     }
-    $user = $Db->where('securityqans', $token)->getOne('tblclients');
+    $user = $Db->where('uuid', $token)->getOne('tblclients');
     //$user = Capsule::table('tblclients')->where('securityqans', $token)->first();
     if (empty($user)) {
         return echoJson(0, '', '令牌过期，请尝试重新登录');
@@ -68,7 +68,7 @@ function auth(){
     if (!password_verify($password, $user['password'])) {
         return echoJson(0, '', '用户名密码错误');
     }
-    return echoJson(1, $user['securityqans'], '欢迎回来');
+    return echoJson(1, $user['uuid'], '欢迎回来');
 }
 
 function getHosting(){
