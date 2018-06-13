@@ -116,18 +116,18 @@ function getConfig(){
   //组装数据
   $v2ray = $tempdb->where('pid', $packageId)->getOne('user');
   $jsonData = file_get_contents('./client.json');
-  $jsonData = json_decode($jsonData, true);
+  $jsonData = json_decode($jsonData);
   //socks
-  $jsonData['inbound']['port'] = 31211;
+  $jsonData->inbound->port = 31211;
   //http
-  $jsonData['inboundDetour'][0]['port'] = 31210;
+  $jsonData->inbound[0]->port = 31210;
   //other
-  $jsonData['outbound']['settings']['vnext'][0]['address'] = (string)$node->server;
-  $jsonData['outbound']['settings']['vnext'][0]['port'] = (int)$node->port;
-  $jsonData['outbound']['settings']['vnext'][0]['users'][0]['id'] = (string)$v2ray['v2ray_uuid'];
-  $jsonData['outbound']['settings']['vnext'][0]['users'][0]['alterId'] = (int)$v2ray['v2ray_alter_id'];
-  $jsonData['outbound']['settings']['vnext'][0]['remark'] = (string)$node->name;
-  echo json_encode($jsonData);
+  $jsonData->outbound->settings->vnext[0]->address = (string)$node->server;
+  $jsonData->outbound->settings->vnext[0]->port = (int)$node->port;
+  $jsonData->outbound->settings->vnext[0]->users[0]->id = (string)$v2ray['v2ray_uuid'];
+  $jsonData->outbound->settings->vnext[0]->users[0]->alterId = (int)$v2ray['v2ray_alter_id'];
+  $jsonData->outbound->settings->vnext[0]->remark = (string)$node->name;
+  echo json_encode($jsonData, JSON_UNESCAPED_UNICODE);
 }
 
 function getUserInfo(){

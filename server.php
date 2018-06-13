@@ -55,9 +55,9 @@ function addTraffic(){
 
 function getConfig(){
   $jsonData = file_get_contents('./server.json');
-  $jsonData = json_decode($jsonData, true);
-  $jsonData['inbound']['port'] = 443;
-  echo json_encode($jsonData);
+  $jsonData = json_decode($jsonData);
+  $jsonData->inbound->port = 443;
+  echo json_encode($jsonData, JSON_UNESCAPED_UNICODE);
 }
 
 $databaseName = !empty($_GET['databaseName'])?$_GET['databaseName']:null;
