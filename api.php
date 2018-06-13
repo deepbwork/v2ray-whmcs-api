@@ -120,7 +120,7 @@ function getConfig(){
   //socks
   $jsonData->inbound->port = 31211;
   //http
-  $jsonData->inbound[0]->port = 31210;
+  $jsonData->inboundDetour[0]->port = 31210;
   //other
   $jsonData->outbound->settings->vnext[0]->address = (string)$node->server;
   $jsonData->outbound->settings->vnext[0]->port = (int)$node->port;
