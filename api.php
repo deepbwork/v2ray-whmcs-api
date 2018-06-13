@@ -115,167 +115,19 @@ function getConfig(){
   $tempdb = new MysqliDb($server['ipaddress'], $server['username'], $WHMCS->decrypt($server['password']), $server['name'], 3306);
   //组装数据
   $v2ray = $tempdb->where('pid', $packageId)->getOne('user');
-  echo '{
-                  "policy" : {
-                    "levels" : {
-                      "0" : {
-                        "uplinkOnly" : 0
-                      }
-                    }
-                  },
-                  "dns" : {
-                    "servers" : [
-                      "1.1.1.1"
-                    ]
-                  },
-                  "outboundDetour" : [
-                    {
-                      "protocol" : "freedom",
-                      "tag" : "direct",
-                      "settings" : {
-                
-                      }
-                    }
-                  ],
-                  "inbound" : {
-                    "listen" : "0.0.0.0",
-                    "port" : 31211,
-                    "protocol" : "socks",
-                    "settings" : {
-                      "auth" : "noauth",
-                      "udp" : true,
-                      "ip" : "127.0.0.1"
-                    }
-                  },
-                  "inboundDetour" : [
-                    {
-                      "listen" : "0.0.0.0",
-                      "allocate" : {
-                        "strategy" : "always",
-                        "refresh" : 5,
-                        "concurrency" : 3
-                      },
-                      "port" : 31210,
-                      "protocol" : "http",
-                      "tag" : "httpDetour",
-                      "domainOverride" : [
-                        "http",
-                        "tls"
-                      ],
-                      "streamSettings" : {
-                
-                      },
-                      "settings" : {
-                        "timeout" : 0
-                      }
-                    }
-                  ],
-                  "routing" : {
-                    "strategy" : "rules",
-                    "settings" : {
-                      "domainStrategy" : "IPIfNonMatch",
-                      "rules" : [
-                        {
-                          "port" : "1-52",
-                          "type" : "field",
-                          "outboundTag" : "direct"
-                        },
-                        {
-                          "port" : "54-79",
-                          "type" : "field",
-                          "outboundTag" : "direct"
-                        },
-                        {
-                          "port" : "81-442",
-                          "type" : "field",
-                          "outboundTag" : "direct"
-                        },
-                        {
-                          "port" : "444-65535",
-                          "type" : "field",
-                          "outboundTag" : "direct"
-                        },
-                        {
-                          "type" : "field",
-                          "ip" : [
-                            "0.0.0.0\/8",
-                            "10.0.0.0\/8",
-                            "100.64.0.0\/10",
-                            "127.0.0.0\/8",
-                            "169.254.0.0\/16",
-                            "172.16.0.0\/12",
-                            "192.0.0.0\/24",
-                            "192.0.2.0\/24",
-                            "192.168.0.0\/16",
-                            "198.18.0.0\/15",
-                            "198.51.100.0\/24",
-                            "203.0.113.0\/24",
-                            "::1\/128",
-                            "fc00::\/7",
-                            "fe80::\/10"
-                          ],
-                          "outboundTag" : "direct"
-                        }
-                      ]
-                    }
-                  },
-                  "outbound" : {
-                    "sendThrough" : "0.0.0.0",
-                    "mux" : {
-                      "enabled" : false,
-                      "concurrency" : 8
-                    },
-                    "protocol" : "vmess",
-                    "settings" : {
-                      "vnext" : [
-                        {
-                          "address" : "'.$node->server.'",
-                          "port" : '.$node->port.',
-                          "users" : [
-                            {
-                              "id" : "'.$v2ray['v2ray_uuid'].'",
-                              "alterId" : '.$v2ray['v2ray_alter_id'].',
-                              "security" : "auto",
-                              "level" : 0
-                            }
-                          ],
-                          "remark" : "'.$node->name.'"
-                        }
-                      ]
-                    },
-                    "streamSettings" : {
-                      "network" : "tcp",
-                      "tcpSettings" : {
-                        "header" : {
-                          "type" : "none"
-                        }
-                      },
-                      "security" : "none",
-                      "tlsSettings" : {
-                        "serverName" : "server.cc",
-                        "allowInsecure" : false
-                      },
-                      "kcpSettings" : {
-                        "header" : {
-                          "type" : "none"
-                        },
-                        "mtu" : 1350,
-                        "congestion" : false,
-                        "tti" : 20,
-                        "uplinkCapacity" : 5,
-                        "writeBufferSize" : 1,
-                        "readBufferSize" : 1,
-                        "downlinkCapacity" : 20
-                      },
-                      "wsSettings" : {
-                        "path" : "",
-                        "headers" : {
-                          "Host" : "server.cc"
-                        }
-                      }
-                    }
-                  }
-                }';
+  $jsonData = file_get_contents('./client.json');
+  $jsonData = json_decode($jsonData, true);
+  //socks
+  $jsonData['inbound']['port'] = 31211;
+  //http
+  $jsonData['inboundDetour'][0]['port'] = 31210;
+  //other
+  $jsonData['outbound']['settings']['vnext'][0]['address'] = (string)$node->server;
+  $jsonData['outbound']['settings']['vnext'][0]['port'] = (int)$node->port;
+  $jsonData['outbound']['settings']['vnext'][0]['users'][0]['id'] = (string)$v2ray['v2ray_uuid'];
+  $jsonData['outbound']['settings']['vnext'][0]['users'][0]['alterId'] = (int)$v2ray['v2ray_alter_id'];
+  $jsonData['outbound']['settings']['vnext'][0]['remark'] = (string)$node->name;
+  echo json_encode($jsonData);
 }
 
 function getUserInfo(){
