@@ -50,7 +50,8 @@ function getNodes($str, $serverId) {
             'server' => $tempB[1],
             'port' => $tempB[2],
             'sec' => $tempB[3],
-            'remark' => $tempB[4]
+            'remark' => $tempB[4],
+            'tls' => (int)$tempB[5]
         ];
     }
     return $nodes;
@@ -127,6 +128,9 @@ function getConfig(){
     $jsonData->outbound->settings->vnext[0]->users[0]->id = (string)$v2ray['v2ray_uuid'];
     $jsonData->outbound->settings->vnext[0]->users[0]->alterId = (int)$v2ray['v2ray_alter_id'];
     $jsonData->outbound->settings->vnext[0]->remark = (string)$node->name;
+    if ($node->tls) {
+        $jsonData->outbound->streamSettings->security = "tls";
+    }
   echo json_encode($jsonData, JSON_UNESCAPED_UNICODE);
 }
 
