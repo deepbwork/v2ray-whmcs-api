@@ -135,7 +135,6 @@
         },
         "security" : "none",
         "tlsSettings" : {
-          "serverName" : "server.cc",
           "allowInsecure" : false
         },
         "kcpSettings" : {
