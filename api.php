@@ -3,6 +3,7 @@ error_reporting(E_ALL^E_NOTICE);
 //require(dirname(dirname(__FILE__)).'/init.php');
 require('lib/DB.php');
 require('lib/WHMCS.php');
+require('lib/TOOLS.php');
 require('config.php');
 //use WHMCS\Database\Capsule;
 header("Access-Control-Allow-Origin: *");
@@ -72,6 +73,34 @@ function auth(){
     return echoJson(1, $user['uuid'], '欢迎回来');
 }
 
+function getSubscribe(){
+    global $Db,$WHMCS,$TOOLS;
+    $user = verifyToken();
+    $hosting = $Db->where('userid', $user['id'])
+        ->where('domainstatus', 'Active')
+        ->where('id', $_GET['pid'])
+        ->getOne('tblhosting');
+    if (!$hosting) {
+        return echoJson(0, '', '无法获取到该产品信息');
+    }
+    $product = $Db->where('id', $hosting['packageid'])
+        ->getOne('tblproducts');
+    $nodes = getNodes($product['configoption7'], $hosting['server']);
+    //get UserData
+    $server = $Db->where('id', $hosting['server'])->getOne('tblservers');
+    $tempdb = new MysqliDb($server['ipaddress'], $server['username'], $WHMCS->decrypt($server['password']), $server['name'], 3306);
+    //组装数据
+    $v2ray = $tempdb->where('pid', $hosting['id'])->getOne('user');
+    if (!$v2ray['enable']) {
+        return echoJson(0, '', '此产品已停用');
+    }
+    $subscribe = "";
+    foreach($nodes as $node) {
+        $subscribe = $subscribe.$TOOLS->toVmessLink($node, $v2ray['v2ray_uuid'])."\r\n";
+    }
+    exit(base64_encode($subscribe));
+}
+
 function getHosting(){
     global $Db;
     $user = verifyToken();
@@ -105,14 +134,12 @@ function getHosting(){
 function getConfig(){
     global $Db,$WHMCS;
     verifyToken();
-    // $_GET['node'] = 'eyJpZCI6MCwibmFtZSI6ImFhYSIsInNlcnZlciI6ImFhYS5jb20iLCJwb3J0IjoiYWFhIiwic2VjIjoibm9uZSIsInJlbWFyayI6bnVsbH0=';
     $nodeData = !empty($_GET['node'])?$_GET['node']:null;
     $node = json_decode(urldecode(base64_decode($nodeData)));
     $serverId = !empty($_GET['serverId'])?$_GET['serverId']:null;
     $packageId = !empty($_GET['packageId'])?$_GET['packageId']:null;
     //get server
     $server = $Db->where('id', $serverId)->getOne('tblservers');
-    // $server = Capsule::table('tblservers')->where('id', $serverId)->first();
     $tempdb = new MysqliDb($server['ipaddress'], $server['username'], $WHMCS->decrypt($server['password']), $server['name'], 3306);
     //组装数据
     $v2ray = $tempdb->where('pid', $packageId)->getOne('user');
@@ -164,7 +191,8 @@ $service = !empty($_GET['s'])?$_GET['s']:null;
 if(isset($service)){
 	$Db = new MysqliDb($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_database'], $config['db_port']);
 	//$server = Capsule::table('tblservers')->where('name', $databaseName)->first();
-	$WHMCS = new WHMCS($config['cc_encryption_hash']);
+    $WHMCS = new WHMCS($config['cc_encryption_hash']);
+    $TOOLS = new TOOLS();
 	switch($service) {
 	    case 'user.auth': return auth();
 	    break;
@@ -174,10 +202,12 @@ if(isset($service)){
 	    break;
 	    case 'v2ray.userInfo' : return getUserInfo();
 	    break;
-      case 'app.init' : return getInit();
-      break;
-      case 'app.log' : return recordLog();
-      break;
+        case 'app.init' : return getInit();
+        break;
+        case 'app.log' : return recordLog();
+        break;
+        case 'v2ray.subscribe' : return getSubscribe();
+        break;
 	}
 
 }else{
