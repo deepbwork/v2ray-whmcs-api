@@ -54,15 +54,15 @@ function addTraffic(){
 
 
 function getConfig(){
-  $jsonData = file_get_contents('./server.json');
-  $jsonData = json_decode($jsonData);
-  $jsonData->inbound->port = 443;
-  if ($_GET['tls']) {
-      $jsonData->inbound->streamSettings->security = "tls";
-      $jsonData->inbound->streamSettings->tlsSettings->certificates[0]->certificateFile = "/home/v2ray.crt";
-      $jsonData->inbound->streamSettings->tlsSettings->certificates[0]->keyFile = "/home/v2ray.key";
-  }
-  echo json_encode($jsonData, JSON_UNESCAPED_UNICODE);
+    $jsonData = file_get_contents('./server.json');
+    $jsonData = json_decode($jsonData);
+    $jsonData->inbound->port = 443;
+    if ($_GET['tls']) {
+        $jsonData->inbound->streamSettings->security = "tls";
+        $tls = (object) array(certificateFile => "/home/v2ray.crt", keyFile => "/home/v2ray.key");
+        $jsonData->inbound->streamSettings->tlsSettings->certificates[0] = $tls;
+    }
+    echo json_encode($jsonData, JSON_UNESCAPED_UNICODE);
 }
 
 $databaseName = !empty($_GET['databaseName'])?$_GET['databaseName']:null;
