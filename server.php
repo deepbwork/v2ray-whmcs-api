@@ -59,7 +59,7 @@ function getConfig(){
     $jsonData->inbound->port = 443;
     if ($_GET['tls']) {
         $jsonData->inbound->streamSettings->security = "tls";
-        $tls = (object) array(certificateFile => "/home/v2ray.crt", keyFile => "/home/v2ray.key");
+        $tls = (object) array("certificateFile" => "/home/v2ray.crt", "keyFile" => "/home/v2ray.key");
         $jsonData->inbound->streamSettings->tlsSettings->certificates[0] = $tls;
     }
     echo json_encode($jsonData, JSON_UNESCAPED_UNICODE);
