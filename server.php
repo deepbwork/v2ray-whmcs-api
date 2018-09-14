@@ -38,9 +38,11 @@ function addTraffic(){
         $fetchData = [
             't' => time(),
             'u' => $user['u'] + ($data['u'] * $rate),
-            'd' => $user['d'] + ($data['d'] * $rate),
-            'enable' => $user['u'] + $user['d'] <= $user['transfer_enable']?1:0
+            'd' => $user['d'] + ($data['d'] * $rate)
         ];
+        if($user['u'] + $user['d'] > $user['transfer_enable']) {
+            $fetchData['enable'] = 0;
+        }
         $result = $Db->where('pid', $data['user_id'])->update('user', $fetchData);
     }
     
