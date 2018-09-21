@@ -58,7 +58,7 @@ function addTraffic(){
 function getConfig(){
     $jsonData = file_get_contents('./server.json');
     $jsonData = json_decode($jsonData);
-    $jsonData->inbound->port = 443;
+    $jsonData->inbound->port = $_GET['port'];
     if ($_GET['tls']) {
         $jsonData->inbound->streamSettings->security = "tls";
         $tls = (object) array("certificateFile" => "/home/v2ray.crt", "keyFile" => "/home/v2ray.key");
