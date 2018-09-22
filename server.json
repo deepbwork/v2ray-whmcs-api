@@ -15,7 +15,19 @@
         "clients": []
       },
       "streamSettings": {
-        "network": "tcp"
+        "network": "tcp",
+        "kcpSettings" : {
+          "header" : {
+            "type" : "none"
+          },
+          "mtu" : 1350,
+          "congestion" : false,
+          "tti" : 20,
+          "uplinkCapacity" : 5,
+          "writeBufferSize" : 1,
+          "readBufferSize" : 1,
+          "downlinkCapacity" : 20
+        }
       },
       "tag": "proxy"
     },
