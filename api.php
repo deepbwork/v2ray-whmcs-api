@@ -95,7 +95,9 @@ function getSubscribe(){
         return echoJson(0, '', '此产品已停用');
     }
     $subscribe = "";
-    if(strpos($_SERVER['HTTP_USER_AGENT'], 'Quantumult') !==-1) {
+    if(strpos($_SERVER['HTTP_USER_AGENT'], 'Quantumult') !==false) {
+      
+    	header('subscription-userinfo: upload='.$v2ray['u'].'; download='.$v2ray['d'].';total='.$v2ray['transfer_enable']);
         foreach($nodes as $node) {
               $subscribe = $subscribe.$TOOLS->toQuantumult($node, $v2ray['v2ray_uuid'], $config['app_title'])."\r\n";
         }
@@ -103,9 +105,6 @@ function getSubscribe(){
         foreach($nodes as $node) {
               $subscribe = $subscribe.$TOOLS->toVmessLink($node, $v2ray['v2ray_uuid'])."\r\n";
         }
-    }
-  	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Quantumult') !==-1) {
-    	header('subscription-userinfo: upload='.$v2ray['u'].'; download='.$v2ray['d'].';total='.$v2ray['t']);
     }
     exit(base64_encode($subscribe));
 }
