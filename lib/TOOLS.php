@@ -15,4 +15,8 @@ class TOOLS {
         ];
         return "vmess://".base64_encode(json_encode($config));
     }
+  
+  	public function toQuantumult($params, $uuid, $groupName){
+     	return "vmess://".base64_encode($params['name'].'= vmess, '.$params['server'].', '.$params['port'].', chacha20-ietf-poly1305, "'.$uuid.'", over-tls='.((int)$params['tls']?"true":"false").', certificate=1, group='.$groupName);
+    }
 }

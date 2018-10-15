@@ -74,7 +74,7 @@ function auth(){
 }
 
 function getSubscribe(){
-    global $Db,$WHMCS,$TOOLS;
+    global $Db,$WHMCS,$TOOLS,$config;
     $user = verifyToken();
     $hosting = $Db->where('userid', $user['id'])
         ->where('domainstatus', 'Active')
@@ -95,8 +95,17 @@ function getSubscribe(){
         return echoJson(0, '', '此产品已停用');
     }
     $subscribe = "";
-    foreach($nodes as $node) {
-        $subscribe = $subscribe.$TOOLS->toVmessLink($node, $v2ray['v2ray_uuid'])."\r\n";
+    if(strpos($_SERVER['HTTP_USER_AGENT'], 'Quantumult') !==-1) {
+        foreach($nodes as $node) {
+              $subscribe = $subscribe.$TOOLS->toQuantumult($node, $v2ray['v2ray_uuid'], $config['app_title'])."\r\n";
+        }
+    }else{
+        foreach($nodes as $node) {
+              $subscribe = $subscribe.$TOOLS->toVmessLink($node, $v2ray['v2ray_uuid'])."\r\n";
+        }
+    }
+  	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Quantumult') !==-1) {
+    	header('subscription-userinfo: upload='.$v2ray['u'].'; download='.$v2ray['d'].';total='.$v2ray['t']);
     }
     exit(base64_encode($subscribe));
 }
