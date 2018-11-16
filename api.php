@@ -171,16 +171,21 @@ function getConfig(){
 
 function getUserInfo(){
     global $Db,$WHMCS;
-    verifyToken();
+    $user = verifyToken();
     $serverId = !empty($_GET['serverId'])?$_GET['serverId']:null;
     $packageId = !empty($_GET['packageId'])?$_GET['packageId']:null;
     //get server
     // $server = Capsule::table('tblservers')->where('id', $serverId)->first();
+    $hosting = $Db->where('id', $packageId)->getOne('tblhosting');
+    if($user['id']!==$hosting['userid']){
+        die('Insufficient authority');
+    }
+    
     $server = $Db->where('id', $serverId)->getOne('tblservers');
-  $tempdb = new MysqliDb($server['ipaddress'], $server['username'], $WHMCS->decrypt($server['password']), $server['name'], 3306);
-  //组装数据
-  $v2ray = $tempdb->where('pid', $packageId)->getOne('user');
-  return echoJson(1, $v2ray, '');
+    $tempdb = new MysqliDb($server['ipaddress'], $server['username'], $WHMCS->decrypt($server['password']), $server['name'], 3306);
+    //组装数据
+    $v2ray = $tempdb->where('pid', $packageId)->getOne('user');
+    return echoJson(1, $v2ray, '');
 }
 
 function getInit(){
